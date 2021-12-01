@@ -1,17 +1,21 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    fun part1(input: List<Int>): Int {
+        return input.zipWithNext { a, b -> b > a }.count { it }
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
+    fun part2(input: List<Int>): Int {
+        val threeSumsHaha = mutableListOf<Int>()
+
+        for ((index, value) in input.withIndex()) {
+            if (index + 2 <= input.lastIndex) {
+                threeSumsHaha.add(value + input[index + 1] + input[index + 2])
+            }
+        }
+
+        return threeSumsHaha.zipWithNext { a, b -> b > a }.count { it }
     }
 
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    val input = readInput("Day01")
+    val input = readInput("Day01").map { it.toInt() }
     println(part1(input))
     println(part2(input))
 }
