@@ -23,11 +23,12 @@ fun main() {
 private fun performCommand(command: String, position: Pair<Int, Int>): Pair<Int, Int> {
     val horizontal = position.first
     val depth = position.second
+    val moveValue = getMoveValue(command)
 
     return when {
-        isForward(command) -> Pair(horizontal + getMoveValue(command), depth)
-        isDown(command) -> Pair(horizontal, depth + getMoveValue(command))
-        isUp(command) -> Pair(horizontal, depth - getMoveValue(command))
+        isForward(command) -> Pair(horizontal + moveValue, depth)
+        isDown(command) -> Pair(horizontal, depth + moveValue)
+        isUp(command) -> Pair(horizontal, depth - moveValue)
         else -> position
     }
 }
@@ -36,16 +37,17 @@ private fun performCommandPart2(command: String, position: Triple<Int, Int, Int>
     val horizontal = position.first
     val depth = position.second
     val aim = position.third
+    val moveValue = getMoveValue(command)
 
     return when {
-        isForward(command) -> Triple(horizontal + getMoveValue(command), depth + (getMoveValue(command) * aim), aim)
-        isDown(command) -> Triple(horizontal, depth, aim + getMoveValue(command))
-        isUp(command) -> Triple(horizontal, depth, aim - getMoveValue(command))
+        isForward(command) -> Triple(horizontal + moveValue, depth + moveValue * aim, aim)
+        isDown(command) -> Triple(horizontal, depth, aim + moveValue)
+        isUp(command) -> Triple(horizontal, depth, aim - moveValue)
         else -> position
     }
 }
 
-private fun isForward(command: String): Boolean = """forward (\d)""".toRegex().matches(command)
-private fun isDown(command: String): Boolean = """down (\d)""".toRegex().matches(command)
-private fun isUp(command: String): Boolean = """up (\d)""".toRegex().matches(command)
+private fun isForward(command: String): Boolean = """forward (\d+)""".toRegex().matches(command)
+private fun isDown(command: String): Boolean = """down (\d+)""".toRegex().matches(command)
+private fun isUp(command: String): Boolean = """up (\d+)""".toRegex().matches(command)
 private fun getMoveValue(command: String): Int = command.substringAfter(" ").toInt()
