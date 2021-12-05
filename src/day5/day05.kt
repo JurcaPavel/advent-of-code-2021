@@ -49,14 +49,9 @@ fun main() {
 data class Pipe(val firstPoint: Point, val lastPoint: Point)
 data class Point(val x: Int, val y: Int)
 private val pipeMapRegex: Regex = """(\d+),(\d+) -> (\d+),(\d+)""".toRegex()
-private fun getPipeFromString(line: String): Pipe {
-    val (x1, y1, x2, y2) = pipeMapRegex.find(line)!!.destructured
-    val firstPoint = Point(x1.toInt(), y1.toInt())
-    val lastPoint = Point(x2.toInt(), y2.toInt())
-    return Pipe(firstPoint, lastPoint)
-}
 private fun isHorizontalPipe(pipe: Pipe): Boolean = pipe.firstPoint.y == pipe.lastPoint.y
 private fun isVerticalPipe(pipe: Pipe): Boolean = pipe.firstPoint.x == pipe.lastPoint.x
+
 private fun isDiagonalPipe(pipe: Pipe): Boolean {
     if (pipe.firstPoint.x < pipe.lastPoint.x) {
         val xDiff = pipe.lastPoint.x - pipe.firstPoint.x
@@ -65,6 +60,13 @@ private fun isDiagonalPipe(pipe: Pipe): Boolean {
         val xDiff = pipe.firstPoint.x - pipe.lastPoint.x
         return isXYRatioCorrect(pipe, xDiff)
     }
+}
+
+private fun getPipeFromString(line: String): Pipe {
+    val (x1, y1, x2, y2) = pipeMapRegex.find(line)!!.destructured
+    val firstPoint = Point(x1.toInt(), y1.toInt())
+    val lastPoint = Point(x2.toInt(), y2.toInt())
+    return Pipe(firstPoint, lastPoint)
 }
 
 private fun isXYRatioCorrect(pipe: Pipe, xDiff: Int): Boolean {
@@ -102,7 +104,7 @@ private fun getAllVerticalPipePoints(pipe: Pipe): List<Point> {
     } else (pipe.firstPoint.y .. pipe.lastPoint.y).map { Point(x, it) }
 }
 
-fun getAllDiagonalPipePoints(pipe: Pipe): List<Point> {
+private fun getAllDiagonalPipePoints(pipe: Pipe): List<Point> {
     if (pipe.firstPoint.x < pipe.lastPoint.x) {
         val xRange = pipe.firstPoint.x .. pipe.lastPoint.x
         return getDiagonalPipePointsWithXRange(pipe, xRange)
